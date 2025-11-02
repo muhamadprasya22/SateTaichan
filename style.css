@@ -1,1 +1,202 @@
 
+/* ========================================================= */
+/* style.css - Styling Utama untuk RestoKita */
+/* ========================================================= */
+
+
+/* --- 1. GENERAL & FONT --- */
+/* ------------------------- */
+body {
+    /* Mengatur font utama untuk seluruh halaman */
+    font-family: 'Poppins', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+    /* Memberikan padding di atas untuk mencegah konten tertutup navbar saat smooth scroll */
+    scroll-padding-top: 80px; 
+}
+
+
+/* --- 2. NAVBAR & MODAL EFFECTS --- */
+/* --------------------------------- */
+
+/* Efek Glass (Transparan saat di atas Hero) */
+.glass-effect {
+    backdrop-filter: blur(15px);
+    /* Warna semi-transparan gelap untuk kontras dengan teks putih */
+    background: rgba(0, 0, 0, 0.4); 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Efek Navbar saat di-scroll (Lebih solid dan terang) */
+.navbar-scrolled {
+    backdrop-filter: blur(15px);
+    /* Warna yang lebih terang */
+    background: rgba(255, 255, 255, 0.95); 
+    border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+    /* Tambahkan bayangan ringan */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
+}
+
+/* Mengubah warna teks Navbar saat discroll agar tetap terlihat di background terang */
+.navbar-scrolled a, 
+.navbar-scrolled button,
+.navbar-scrolled span {
+    color: #333 !important; /* Warna gelap untuk teks */
+}
+/* Memastikan warna logo/judul Navbar tetap gelap */
+.navbar-scrolled .text-white { 
+    color: #333 !important;
+}
+
+.navbar-scrolled button:hover {
+    color: #ff6b35 !important; /* Warna hover oranye */
+}
+
+/* Overlay untuk Modal (Keranjang & QR) */
+.modal-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+/* --- 3. KERANJANG BELANJA (CART MODAL) - Perbaikan Layout Flexbox --- */
+/* -------------------------------------------------------------------- */
+
+/* Menjaga modal tetap di atas layar */
+#cart-modal-container {
+    display: flex;
+    align-items: flex-start; /* Mengatur konten menempel ke atas pada desktop */
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1rem;
+}
+
+#cart-modal-content {
+    background-color: white;
+    border-radius: 1rem; 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    max-width: 28rem; 
+    width: 100%;
+    position: relative;
+    /* PENTING: Menggunakan Flexbox untuk memisahkan body yang di-scroll dari footer */
+    display: flex; 
+    flex-direction: column;
+    max-height: auto; 
+}
+
+@media (max-width: 640px) {
+    #cart-modal-content {
+        /* Di mobile, gunakan seluruh layar (Full Screen) */
+        height: 100vh; 
+        max-width: 100%;
+        width: 100%;
+        border-radius: 0; /* Hilangkan border radius */
+    }
+    #cart-modal-container {
+        align-items: flex-start;
+        padding: 0;
+    }
+}
+
+/* KONTEN KERANJANG (BODY MODAL) - Ini yang akan di-scroll */
+#cart-items-container {
+    padding: 1.5rem; 
+    flex-grow: 1; /* Mengambil semua ruang yang tersisa */
+    overflow-y: auto; /* Membuat konten ini bisa di-scroll */
+    max-height: 80vh; /* Batas tinggi untuk desktop/tablet agar tidak terlalu panjang */
+}
+@media (max-width: 640px) {
+    #cart-items-container {
+        max-height: none; /* Hapus batas di mobile, biarkan flexbox yang mengatur */
+        padding: 1rem;
+    }
+}
+
+/* FOOTER KERANJANG (Tombol Checkout) - Harus menempel di bawah */
+.cart-footer {
+    padding: 1.5rem; 
+    border-top: 1px solid #e5e7eb; 
+    flex-shrink: 0; /* MENCEGAH FOOTER IKUT TERSCROLL/TENGGELAM */
+    display: block; 
+}
+
+/* --- 4. HERO SECTION --- */
+/* ----------------------- */
+.hero-bg {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), 
+                 url('https://img-global.cpcdn.com/recipes/3a6fdb031608038b/1200x630cq70/photo.jpg'); 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+
+/* --- 5. CARD & BUTTON HOVER EFFECTS --- */
+/* -------------------------------------- */
+
+/* Efek hover pada Card (Menu & Review) */
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-8px); /* Mengangkat sedikit */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); /* Bayangan lebih kuat */
+}
+
+/* Tombol Utama (Primary Button) */
+.btn-primary {
+    background: linear-gradient(135deg, #ff6b35, #ff8c42); /* Gradient Oranye */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(255, 107, 53, 0.2); 
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #e55a2b, #e57a35); /* Gradient lebih gelap */
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4); /* Bayangan oranye lebih kuat */
+}
+
+
+/* --- 6. FLOATING BUTTONS & ANIMATION --- */
+/* --------------------------------------- */
+
+/* Tombol WhatsApp Mengambang */
+.floating-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    animation: pulse 2s infinite; /* Animasi berdenyut */
+}
+
+/* Tombol Scroll ke Atas */
+.scroll-to-top {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    z-index: 999;
+    opacity: 0; /* Sembunyikan secara default */
+    transition: opacity 0.3s ease;
+}
+
+.scroll-to-top.visible {
+    opacity: 1; /* Tampilkan saat class 'visible' ditambahkan oleh JS */
+}
+
+/* Keyframes untuk animasi pulse (berdenyut) */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.7);
+    }
+    70% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 10px rgba(255, 107, 53, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 107, 53, 0);
+    }
+}
