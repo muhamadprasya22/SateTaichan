@@ -14,7 +14,7 @@ const menuItems = [
 let cart = JSON.parse(localStorage.getItem('restokitaCart')) || [];
 
 // Konstanta WhatsApp (Ganti dengan nomor dan pesan Anda)
-const WHATSAPP_NUMBER = "6281234567890"; // Ganti dengan nomor WhatsApp Restoran Anda
+const WHATSAPP_NUMBER = "628881924271"; // Ganti dengan nomor WhatsApp Restoran Anda
 const RESTAURANT_NAME = "RestoKita Sate Taichan";
 
 // ----------------------------------------------------------------------------------
