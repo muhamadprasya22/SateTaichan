@@ -1,1 +1,383 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RestoKita - Sate Taichan Modern</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css"> 
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-orange-50 font-['Poppins']">
+    
+    <nav id="navbar" class="fixed top-0 w-full z-50 glass-effect transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-2">
+                    <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg">
+                        <i data-lucide="utensils" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <span id="navbar-restaurant-name" class="text-2xl font-bold text-white">Sate Taichan</span>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-white hover:text-orange-300 font-medium transition-colors text-lg">Beranda</a>
+                    <a href="#menu" class="text-white hover:text-orange-300 font-medium transition-colors text-lg">Menu</a>
+                    <a href="#about" class="text-white hover:text-orange-300 font-medium transition-colors text-lg">Tentang Kami</a>
+                    <a href="#reviews" class="text-white hover:text-orange-300 font-medium transition-colors text-lg">Ulasan</a>
+                    <a href="#contact" class="text-white hover:text-orange-300 font-medium transition-colors text-lg">Kontak</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button id="qr-btn" class="p-3 text-white hover:text-orange-300 transition-colors" title="QR Code WhatsApp">
+                        <i data-lucide="qr-code" class="w-6 h-6"></i>
+                    </button>
+                    <button id="cart-btn" class="relative p-3 text-white hover:text-orange-300 transition-colors">
+                        <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                    </button>
+                    <button id="nav-pesan-sekarang" class="hidden md:block btn-primary text-white px-8 py-3 rounded-full font-semibold text-lg shadow-lg">
+                        Pesan Sekarang
+                    </button>
+                    <button id="mobile-menu-btn" class="md:hidden p-3 text-white">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="md:hidden hidden bg-black bg-opacity-90 backdrop-blur-lg border-t border-white border-opacity-20">
+            <div class="px-4 py-6 space-y-4">
+                <a href="#home" class="mobile-menu-link block text-white hover:text-orange-300 font-medium text-lg">Beranda</a>
+                <a href="#menu" class="mobile-menu-link block text-white hover:text-orange-300 font-medium text-lg">Menu</a>
+                <a href="#about" class="mobile-menu-link block text-white hover:text-orange-300 font-medium text-lg">Tentang Kami</a>
+                <a href="#reviews" class="mobile-menu-link block text-white hover:text-orange-300 font-medium text-lg">Ulasan</a>
+                <a href="#contact" class="mobile-menu-link block text-white hover:text-orange-300 font-medium text-lg">Kontak</a>
+                <button id="nav-pesan-sekarang-mobile" class="w-full btn-primary text-white px-6 py-3 rounded-full font-semibold mt-6">
+                    Pesan Sekarang
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero-bg flex items-center justify-center text-white" style="min-height: 120vh; padding-top: 100px;">
+        <div class="text-center px-4 max-w-5xl mx-auto">
+            <h1 id="hero-title" class="text-5xl md:text-7xl font-bold mb-8 leading-tight drop-shadow-lg">Nikmati Makanan Lezat Setiap Hari di RestoKita</h1>
+            <p id="hero-subtitle" class="text-2xl md:text-3xl mb-12 text-orange-100 drop-shadow-md leading-relaxed">Rasakan cita rasa autentik dengan bahan-bahan segar pilihan terbaik yang diolah dengan penuh cinta</p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="#menu" class="btn-primary text-white px-10 py-5 rounded-full font-bold text-xl inline-flex items-center justify-center shadow-2xl">
+                    <i data-lucide="utensils" class="w-6 h-6 mr-3"></i> Lihat Menu
+                </a>
+                <a href="#contact" class="bg-white text-orange-600 px-10 py-5 rounded-full font-bold text-xl hover:bg-orange-50 transition-colors inline-flex items-center justify-center shadow-2xl">
+                    <i data-lucide="phone" class="w-6 h-6 mr-3"></i> Hubungi Kami
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="menu" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Menu Spesial Kami</h2>
+                <p class="text-xl text-gray-600">Pilihan makanan lezat yang dibuat dengan resep rahasia keluarga</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="menu-grid">
+                </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-20 bg-orange-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-gray-800 mb-6">Tentang RestoKita</h2>
+                    <p class="text-lg text-gray-600 mb-6">Sejak **2015**, RestoKita telah menjadi destinasi kuliner favorit keluarga Indonesia. Kami berkomitmen menyajikan makanan berkualitas tinggi dengan cita rasa autentik yang menggugah selera.</p>
+                    <p class="text-lg text-gray-600 mb-8">Dengan menggunakan **bahan-bahan segar pilihan** dan resep turun-temurun, setiap hidangan kami dibuat dengan penuh cinta dan dedikasi untuk memberikan pengalaman kuliner terbaik bagi Anda.</p>
+                    <div class="flex flex-wrap gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-orange-600">50+</div>
+                            <div class="text-gray-600">Menu Pilihan</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-orange-600">10K+</div>
+                            <div class="text-gray-600">Pelanggan Puas</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-orange-600">8+</div>
+                            <div class="text-gray-600">Tahun Pengalaman</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="w-full h-96 bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl flex items-center justify-center">
+                        <i data-lucide="chef-hat" class="w-32 h-32 text-white opacity-80"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="py-20 bg-gradient-to-br from-orange-50 to-orange-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Ulasan Pelanggan</h2>
+                <p class="text-xl text-gray-600">Apa kata mereka tentang RestoKita</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center text-white font-bold text-lg">S</div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800">Sari Dewi</h4>
+                            <div class="flex text-yellow-400">
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"Rendang nya enak banget! Bumbu meresap sempurna dan dagingnya empuk. Pelayanan juga ramah. Pasti balik lagi!"</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-white font-bold text-lg">A</div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800">Ahmad Rizki</h4>
+                            <div class="flex text-yellow-400">
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"Gudeg Jogja nya otentik banget! Rasanya persis seperti di Jogja. Harga juga terjangkau untuk kualitas sebagus ini."</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-teal-400 rounded-full flex items-center justify-center text-white font-bold text-lg">L</div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800">Linda Sari</h4>
+                            <div class="flex text-yellow-400">
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"Tempat favorit keluarga! Anak-anak suka banget sama soto ayamnya. Tempatnya bersih dan nyaman."</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-pink-400 to-rose-400 rounded-full flex items-center justify-center text-white font-bold text-lg">M</div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800">Maya Putri</h4>
+                            <div class="flex text-yellow-400">
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"Gado-gado Jakarta nya juara! Bumbu kacangnya pas banget, tidak terlalu manis. Porsinya juga besar."</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-indigo-400 to-blue-400 rounded-full flex items-center justify-center text-white font-bold text-lg">R</div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800">Rudi Hartono</h4>
+                            <div class="flex text-yellow-400">
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"Ayam bakar Taliwang nya pedas mantap! Cocok buat yang suka pedas. Pelayanan cepat dan staff nya ramah."</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center text-white font-bold text-lg">D</div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800">Dina Marlina</h4>
+                            <div class="flex text-yellow-400">
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i> <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"Es cendol durian nya segar banget! Perfect untuk cuaca panas. Duriannya juga berkualitas, tidak bau menyengat."</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <div class="inline-flex items-center bg-white rounded-full px-8 py-4 shadow-lg">
+                    <div class="flex text-yellow-400 mr-4">
+                        <i data-lucide="star" class="w-6 h-6 fill-current"></i> <i data-lucide="star" class="w-6 h-6 fill-current"></i> <i data-lucide="star" class="w-6 h-6 fill-current"></i> <i data-lucide="star" class="w-6 h-6 fill-current"></i> <i data-lucide="star" class="w-6 h-6 fill-current"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-gray-800">4.9/5</div>
+                        <div class="text-sm text-gray-600">dari 500+ ulasan</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Hubungi Kami</h2>
+                <p class="text-xl text-gray-600">Siap melayani Anda dengan sepenuh hati</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center p-6 bg-orange-50 rounded-2xl">
+                    <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="map-pin" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Alamat</h3>
+                    <p class="text-gray-600">Jl.<br>12345</p>
+                    <button id="open-maps-btn" class="mt-4 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">
+                        <i data-lucide="navigation" class="w-4 h-4 inline mr-1"></i> Buka Maps
+                    </button>
+                </div>
+
+                <div class="text-center p-6 bg-orange-50 rounded-2xl">
+                    <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="phone" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Telepon</h3>
+                    <p class="text-gray-600">(021) 1234-5678<br>0812-3456-7890</p>
+                </div>
+
+                <div class="text-center p-6 bg-orange-50 rounded-2xl">
+                    <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="clock" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Jam Buka</h3>
+                    <p class="text-gray-600">Senin - Minggu<br>10:00 - 22:00 WIB</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+                            <i data-lucide="utensils" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <span id="footer-restaurant-name" class="text-xl font-bold">RestoKita</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">Menyajikan makanan berkualitas tinggi dengan cita rasa autentik untuk pengalaman kuliner terbaik keluarga Indonesia.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Navigasi</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-300 hover:text-orange-400 transition-colors">Beranda</a></li>
+                        <li><a href="#menu" class="text-gray-300 hover:text-orange-400 transition-colors">Menu</a></li>
+                        <li><a href="#about" class="text-gray-300 hover:text-orange-400 transition-colors">Tentang Kami</a></li>
+                        <li><a href="#contact" class="text-gray-300 hover:text-orange-400 transition-colors">Kontak</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Media Sosial</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center hover:bg-orange-700 transition-colors" aria-label="Instagram">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center hover:bg-orange-700 transition-colors" aria-label="Facebook">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center hover:bg-orange-700 transition-colors" aria-label="Twitter">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p id="footer-text" class="text-gray-300">© 2025 RestoKita. Semua hak dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="cart-modal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-overlay absolute inset-0" id="cart-overlay"></div>
+        
+        <div id="cart-modal-container" class="relative z-10"> 
+            
+            <div id="cart-modal-content" class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+                
+                <div class="p-6 border-b border-gray-200 flex-shrink-0">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-semibold text-gray-800">Keranjang Belanja</h3>
+                        <button id="close-cart" class="p-2 hover:bg-gray-100 rounded-full">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="cart-items-container" class="p-6"> 
+                    <div id="cart-items" class="space-y-4">
+                        </div>
+                    <div id="empty-cart" class="text-center py-8 text-gray-500">
+                        <i data-lucide="shopping-cart" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
+                        <p>Keranjang Anda masih kosong</p>
+                    </div>
+                </div>
+
+                <div class="cart-footer">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-lg font-semibold">Total:</span>
+                        <span id="cart-total" class="text-xl font-bold text-orange-600">Rp 0</span>
+                    </div>
+                    <button id="checkout-btn" class="w-full btn-primary text-white py-3 rounded-full font-semibold disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        Checkout via WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="qr-modal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-overlay absolute inset-0" id="qr-overlay"></div>
+        <div class="relative z-10 flex items-center justify-center min-h-full p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full">
+                <div class="p-6 text-center">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Chat WhatsApp</h3>
+                        <button id="close-qr" class="p-2 hover:bg-gray-100 rounded-full">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <div id="qr-code" class="mb-4 flex justify-center">
+                        </div>
+                    <p class="text-gray-600 mb-4">Scan QR code untuk chat langsung</p>
+                    <button id="direct-wa" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-full font-semibold transition-colors">
+                        <i data-lucide="message-circle" class="w-5 h-5 inline mr-2"></i> Buka WhatsApp Langsung
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="wa-float" class="floating-btn bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg" aria-label="Chat WhatsApp">
+        <i data-lucide="message-circle" class="w-6 h-6"></i>
+    </button>
+    <button id="scroll-top" class="scroll-to-top bg-orange-500 hover:bg-orange-600 text-white p-3 rounded-full shadow-lg" aria-label="Scroll ke atas">
+        <i data-lucide="arrow-up" class="w-5 h-5"></i>
+    </button>
+    
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script> 
+    
+    <script src="script.js"></script>
+    <script>
+        // Pastikan semua ikon Lucide ter-render setelah DOM dimuat
+        lucide.createIcons();
+    </script>
+</body>
+</html>
