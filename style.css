@@ -1,48 +1,111 @@
+/* =========================================
+   DASAR & SCROLLBAR
+   ========================================= */
 body { -webkit-tap-highlight-color: transparent; }
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-.active-scale:active { transform: scale(0.95); transition: transform 0.1s; }
+.active-scale:active { transform: scale(0.95); transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
 
-#app-loader { transition: opacity 0.5s ease, transform 0.5s ease; z-index: 9999; }
-#app-customer, #app-admin { transition: opacity 0.4s ease, transform 0.4s ease; position: absolute; inset: 0; width: 100%; height: 100%; }
+/* Scroll halus untuk kontainer */
+.smooth-scroll { scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+
+/* =========================================
+   SISTEM PORTAL & LOADER
+   ========================================= */
+#app-loader { transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s ease; z-index: 9999; }
+#app-customer, #app-admin { transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); position: absolute; inset: 0; width: 100%; height: 100%; }
 .mode-hidden { opacity: 0; transform: scale(0.98); pointer-events: none; z-index: -1; display: none; }
 .mode-active { opacity: 1; transform: scale(1); pointer-events: auto; z-index: 1; display: flex; }
 
-.view-pane { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow-y: auto; overflow-x: hidden; transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s ease; opacity: 0; pointer-events: none; will-change: transform, opacity; }
+/* =========================================
+   PAGINATION VIEW (SLIDER)
+   ========================================= */
+.view-pane { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow-y: auto; overflow-x: hidden; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease; opacity: 0; pointer-events: none; will-change: transform, opacity; padding-bottom: 120px; }
 .view-pane.active { transform: translate3d(0, 0, 0); opacity: 1; pointer-events: auto; z-index: 10; }
-.view-pane.slide-left { transform: translate3d(-30%, 0, 0); opacity: 0; }
-.view-pane.slide-right { transform: translate3d(100%, 0, 0); opacity: 0; }
-.c-view { padding-bottom: 100px; } @media (min-width: 1024px) { .c-view { padding-bottom: 20px; padding-top: 20px; } }
-.a-view { padding-bottom: 40px; } 
+.view-pane.slide-left { transform: translate3d(-20%, 0, 0); opacity: 0; }
+.view-pane.slide-right { transform: translate3d(80%, 0, 0); opacity: 0; }
 
-@keyframes fadeInUp { from { opacity: 0; transform: translate3d(0, 30px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
-@keyframes popIn { 0% { opacity: 0; transform: scale(0.8); } 70% { transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
-@keyframes cartPulse { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
-.animate-fade-up { animation: fadeInUp 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards; opacity: 0; }
-.animate-pop-in { animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; }
+@media (min-width: 1024px) { 
+    .view-pane { padding-bottom: 40px; } 
+    .a-view { padding-bottom: 60px; }
+}
+
+/* =========================================
+   ANIMASI ELEMEN
+   ========================================= */
+@keyframes fadeInUp { from { opacity: 0; transform: translate3d(0, 40px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+@keyframes popIn { 0% { opacity: 0; transform: scale(0.85); } 70% { transform: scale(1.02); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes cartPulse { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
+
+.animate-fade-up { animation: fadeInUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; opacity: 0; }
+.animate-pop-in { animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; }
 .pulse-once { animation: cartPulse 0.4s ease-out; }
-.delay-100 { animation-delay: 100ms; } .delay-200 { animation-delay: 200ms; } .delay-300 { animation-delay: 300ms; }
+.delay-100 { animation-delay: 100ms; } .delay-200 { animation-delay: 200ms; } .delay-300 { animation-delay: 300ms; } .delay-400 { animation-delay: 400ms; }
 
-.fab-wrapper { position: fixed; bottom: 1.5rem; right: 1.5rem; height: 60px; width: 60px; background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 9999px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1); display: flex; align-items: center; flex-direction: row-reverse; transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden; z-index: 45; }
-.fab-wrapper.expanded { width: calc(100vw - 3rem); max-width: 320px; background: rgba(17, 24, 39, 0.95); }
-.fab-toggle { min-width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer; color: #ffffff; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+/* =========================================
+   FLOATING ACTION BUTTON (NAVIGASI CUSTOMER HP)
+   ========================================= */
+.fab-wrapper { 
+    position: fixed; 
+    bottom: calc(2.5rem + env(safe-area-inset-bottom)); 
+    right: 1.5rem; 
+    height: 60px; 
+    width: 60px; 
+    background: #ffffff; 
+    border: 1px solid rgba(0, 0, 0, 0.05); 
+    border-radius: 9999px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); 
+    display: flex; 
+    align-items: center; 
+    flex-direction: row-reverse; 
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); 
+    overflow: hidden; 
+    z-index: 45; 
+}
+.dark .fab-wrapper {
+    background: #1f2937;
+    border-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.fab-wrapper.expanded { width: calc(100vw - 3rem); max-width: 320px; }
+
+/* Tombol Kompas Pemicu */
+.fab-toggle { min-width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer; color: #111827; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.dark .fab-toggle { color: #f9fafb; }
 .fab-wrapper.expanded .fab-toggle { transform: rotate(180deg); color: #9CA3AF; }
+.dark .fab-wrapper.expanded .fab-toggle { color: #6B7280; }
+
+/* Kontainer Menu yang Melebar */
 .fab-nav-container { display: flex; align-items: center; justify-content: space-evenly; width: 100%; padding-left: 8px; opacity: 0; pointer-events: none; }
 .fab-wrapper.expanded .fab-nav-container { opacity: 1; pointer-events: auto; }
-.fab-nav-item { color: rgba(255, 255, 255, 0.5); cursor: pointer; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transform: translateX(30px) scale(0.5); opacity: 0; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; }
+
+/* Icon Menu di Dalam FAB */
+.fab-nav-item { color: #6B7280; cursor: pointer; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transform: translateX(30px) scale(0.5); opacity: 0; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; }
+.dark .fab-nav-item { color: #9CA3AF; }
 .fab-nav-item.active { color: #F97316; }
+.dark .fab-nav-item.active { color: #F97316; }
+
 .fab-wrapper.expanded .fab-nav-item { transform: translateX(0) scale(1); opacity: 1; }
 .fab-wrapper.expanded .fab-nav-item:nth-child(1) { transition-delay: 0.05s; }
 .fab-wrapper.expanded .fab-nav-item:nth-child(2) { transition-delay: 0.10s; }
 .fab-wrapper.expanded .fab-nav-item:nth-child(3) { transition-delay: 0.15s; }
 .fab-wrapper.expanded .fab-nav-item:nth-child(4) { transition-delay: 0.20s; }
 
-#c-cart-drawer { transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+/* =========================================
+   MODALS & DRAWERS
+   ========================================= */
+#c-cart-drawer { transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
 .drawer-open { transform: translate3d(0, 0, 0) !important; }
-#c-cart-overlay { transition: opacity 0.3s ease; }
+#c-cart-overlay { transition: opacity 0.4s ease; }
+
 .modal-overlay { transition: opacity 0.3s ease; opacity: 0; pointer-events: none; }
 .modal-overlay.open { opacity: 1; pointer-events: auto; }
-.modal-content { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: scale(0.95); opacity: 0; }
+.modal-content { transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); transform: scale(0.9); opacity: 0; }
 .modal-overlay.open .modal-content { transform: scale(1); opacity: 1; }
-#a-mobile-sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
+#a-mobile-sidebar { transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
 .sidebar-open { transform: translateX(0) !important; }
+
+/* Styling khusus untuk iframe Gmaps agar rapi */
+#c-gmaps-iframe { filter: grayscale(10%) contrast(105%); }
+.dark #c-gmaps-iframe { filter: invert(90%) hue-rotate(180deg) contrast(110%); }
