@@ -1,428 +1,369 @@
-// ==================================================================================
-// --- 1. DATA MENU RESTORAN & INISIALISASI ---
-// ==================================================================================
-const menuItems = [
-    { id: 1, name: "Sate Taichan Ayam", price: 25000, category: "Makanan Utama", desc: "10 tusuk sate ayam tanpa bumbu kacang, disajikan dengan sambal pedas dan jeruk limau.", image: "https://images.unsplash.com/photo-1598929550302-39c8945f3c5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.0.3&q=80&w=400" },
-    { id: 2, name: "Sate Taichan Kulit", price: 28000, category: "Makanan Utama", desc: "10 tusuk sate kulit ayam yang dibakar hingga garing, dengan sambal spesial.", image: "https://images.unsplash.com/photo-1544025166-f08985149303?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.0.3&q=80&w=400" },
-    { id: 3, name: "Nasi Putih", price: 5000, category: "Pelengkap", desc: "Nasi putih pulen, cocok untuk pendamping sate.", image: "https://images.unsplash.com/photo-1572656631137-79352973ffa9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.0.3&q=80&w=400" },
-    { id: 4, name: "Es Teh Manis", price: 8000, category: "Minuman", desc: "Teh segar dengan es dan pemanis.", image: "https://images.unsplash.com/photo-1627796531195-2364c7d2427f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.0.3&q=80&w=400" },
-    { id: 5, name: "Air Mineral", price: 5000, category: "Minuman", desc: "Air minum kemasan 600ml.", image: "https://images.unsplash.com/photo-1588665773229-3c35b80a1843?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.0.3&q=80&w=400" },
-    { id: 6, name: "Kentang Goreng", price: 15000, category: "Pelengkap", desc: "Kentang goreng renyah disajikan dengan saus tomat.", image: "https://images.unsplash.com/photo-1606716298585-bc999330a6c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.0.3&q=80&w=400" }
+// ==========================================
+// SISTEM PENYIMPANAN OTOMATIS (LOCAL STORAGE)
+// ==========================================
+
+const defaultMenu = [
+    { id: 1, name: "Taichan Original", category: "sate", price: 25000, desc: "10 Tusuk dada ayam fillet padat.", img: "https://images.unsplash.com/photo-1603048297172-c92544798d5e?w=200", isBest: true },
+    { id: 2, name: "Taichan Kulit", category: "sate", price: 20000, desc: "10 Tusuk kulit ayam crispy gurih.", img: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=200", isBest: true },
+    { id: 3, name: "Es Teh Manis", category: "minuman", price: 7000, desc: "Es teh seduh murni pelepas dahaga.", img: "https://images.unsplash.com/photo-1486328228599-85db4443971f?w=200", isBest: false }
 ];
+let menuItems = JSON.parse(localStorage.getItem('app_menu')) || defaultMenu;
 
-// Inisialisasi Keranjang Belanja dari Local Storage
-let cart = JSON.parse(localStorage.getItem('restokitaCart')) || [];
+let restoWaNumber = localStorage.getItem('app_wa') || "6281234567890";
 
-// Konstanta WhatsApp (Ganti dengan nomor dan pesan Anda)
-const WHATSAPP_NUMBER = "628881924271"; // Ganti dengan nomor WhatsApp Restoran Anda
-const RESTAURANT_NAME = "RestoKita Sate Taichan";
+const defaultVisi = "Menjadi pelopor kedai sate taichan terpedas dan terbaik yang mengutamakan kualitas bahan dan kepuasan pelanggan.";
+const defaultMisi = "1. Menyajikan daging ayam segar pilihan.\n2. Meracik bumbu dengan tingkat kepedasan yang nampol.\n3. Memberikan pelayanan yang memuaskan.";
+let visiMisiData = JSON.parse(localStorage.getItem('app_visimisi')) || { visi: defaultVisi, misi: defaultMisi };
 
-// ----------------------------------------------------------------------------------
-// --- 2. FUNGSI KERANJANG DAN LOGIKA BISNIS ---
-// ----------------------------------------------------------------------------------
+const defaultReviews = [
+    { id: 1, name: "Dimas A.", rating: 5, text: "Gila pedesnya nampol banget! Dagingnya full nggak pelit. Langsung pesen lewat WA cepet." },
+    { id: 2, name: "Siti Nurhaliza", rating: 4, text: "Satenya gurih, sambelnya juara. Mantap pokoknya!" }
+];
+let reviewsData = JSON.parse(localStorage.getItem('app_reviews')) || defaultReviews;
 
-/**
- * Menyimpan data keranjang ke Local Storage.
- */
-function saveCart() {
-    localStorage.setItem('restokitaCart', JSON.stringify(cart));
+let cart = {};
+let cActiveCategory = 'all'; 
+
+// ==========================================
+// INISIALISASI SAAT HALAMAN DIBUKA
+// ==========================================
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const loader = document.getElementById('app-loader');
+        if(loader) { loader.style.opacity = '0'; setTimeout(() => loader.remove(), 500); }
+    }, 800); 
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+    updateThemeIcons(document.documentElement.classList.contains('dark'));
+    renderCustomerMenu(cActiveCategory); 
+    renderCustomerReviews();
+    renderVisiMisi();
+    updateWaUI();
+});
+
+function saveData(key, data) {
+    localStorage.setItem(key, typeof data === 'string' ? data : JSON.stringify(data));
 }
 
-/**
- * Memperbarui tampilan keranjang belanja (modal) dan ikon keranjang (navbar).
- */
-function updateCartUI() {
-    const cartItemsContainer = document.getElementById('cart-items');
-    const cartTotalElement = document.getElementById('cart-total');
-    const cartCountElement = document.getElementById('cart-count');
-    const emptyCartElement = document.getElementById('empty-cart');
-    const checkoutBtn = document.getElementById('checkout-btn');
+// ==========================================
+// PENGATURAN INFO (WA & VISI MISI)
+// ==========================================
+function saveWaNumber(e) {
+    e.preventDefault();
+    let inputNum = document.getElementById('admin-wa-input').value;
+    restoWaNumber = inputNum.replace(/[^0-9]/g, ''); 
+    saveData('app_wa', restoWaNumber);
+    updateWaUI();
+    alert("Nomor WhatsApp berhasil diperbarui!");
+}
 
-    // Kosongkan container item keranjang
-    if (cartItemsContainer) cartItemsContainer.innerHTML = '';
-    
-    let total = 0;
-    let itemCount = 0;
+function updateWaUI() {
+    const adminInput = document.getElementById('admin-wa-input');
+    if(adminInput) adminInput.value = restoWaNumber;
+    const qrImg = document.getElementById('qr-code-img');
+    if(qrImg) qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://wa.me/${restoWaNumber}&color=F97316`;
+}
 
-    if (cart.length === 0) {
-        if (emptyCartElement) emptyCartElement.classList.remove('hidden');
-        if (checkoutBtn) checkoutBtn.disabled = true;
-    } else {
-        if (emptyCartElement) emptyCartElement.classList.add('hidden');
-        if (checkoutBtn) checkoutBtn.disabled = false;
+function saveVisiMisi(e) {
+    e.preventDefault();
+    visiMisiData = { visi: document.getElementById('admin-visi-input').value, misi: document.getElementById('admin-misi-input').value };
+    saveData('app_visimisi', visiMisiData);
+    renderVisiMisi();
+    alert("Visi & Misi berhasil disimpan!");
+}
 
-        cart.forEach(item => {
-            const subtotal = item.price * item.quantity;
-            total += subtotal;
-            itemCount += item.quantity;
-
-            const cartItemHTML = `
-                <div class="flex items-center justify-between border-b border-gray-100 py-3">
-                    <div class="flex items-center space-x-3">
-                        <div class="font-semibold text-gray-800">${item.name}</div>
-                        <div class="text-sm text-gray-500">x${item.quantity}</div>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                        <span class="font-bold text-orange-600 min-w-[70px] text-right">Rp ${subtotal.toLocaleString('id-ID')}</span>
-                        <button onclick="removeFromCart(${item.id}, true)" class="p-1 text-red-500 hover:text-red-700 transition-colors" title="Hapus item ini">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                </div>
-            `;
-            if (cartItemsContainer) cartItemsContainer.insertAdjacentHTML('beforeend', cartItemHTML);
-        });
-    }
-    
-    // Perbarui total dan hitungan di Navbar
-    if (cartTotalElement) cartTotalElement.textContent = `Rp ${total.toLocaleString('id-ID')}`;
-    if (cartCountElement) {
-        cartCountElement.textContent = itemCount;
-        if (itemCount > 0) {
-            cartCountElement.classList.remove('hidden');
-        } else {
-            cartCountElement.classList.add('hidden');
-        }
-    }
-    
-    // Pastikan ikon lucide di modal di-render
-    if (typeof lucide !== 'undefined' && lucide.createIcons) {
-        // Hanya render ikon yang ada di modal (perbaikan: hanya render ulang bagian keranjang)
-        const modalElement = document.getElementById('cart-modal');
-        if (modalElement) lucide.createIcons({ scope: modalElement });
+function renderVisiMisi() {
+    document.getElementById('admin-visi-input').value = visiMisiData.visi;
+    document.getElementById('admin-misi-input').value = visiMisiData.misi;
+    const container = document.getElementById('c-visi-misi-content');
+    if(container) {
+        const misiHtml = visiMisiData.misi.replace(/\n/g, '<br>');
+        container.innerHTML = `<div><p class="text-xs font-bold text-app-orange mb-1 uppercase tracking-wider">Visi</p><p class="text-sm dark:text-gray-300 font-medium leading-relaxed">${visiMisiData.visi}</p></div><div><p class="text-xs font-bold text-app-orange mb-1 mt-3 uppercase tracking-wider">Misi</p><p class="text-sm dark:text-gray-300 leading-relaxed">${misiHtml}</p></div>`;
     }
 }
 
-/**
- * Menambahkan item ke keranjang atau menambah kuantitasnya.
- * @param {number} itemId - ID item menu yang akan ditambahkan.
- */
-function addToCart(itemId) {
-    const selectedItem = menuItems.find(item => item.id === itemId);
-    if (!selectedItem) return;
+// ==========================================
+// MANAJEMEN ULASAN / RATING 
+// ==========================================
+function renderCustomerReviews() {
+    const container = document.getElementById('c-reviews-list');
+    if(!container) return;
+    container.innerHTML = reviewsData.map(r => {
+        let stars = '';
+        for(let i=0; i<5; i++) { stars += `<i data-lucide="star" class="w-4 h-4 ${i < r.rating ? 'text-app-orange fill-current' : 'text-gray-300'}"></i>`; }
+        return `<div class="min-w-[260px] max-w-[260px] bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 snap-center"><div class="flex mb-3">${stars}</div><p class="text-sm text-gray-800 dark:text-gray-200 font-medium mb-3 leading-relaxed">"${r.text}"</p><p class="text-xs text-app-muted dark:text-gray-400 font-bold flex items-center gap-2"><span class="w-6 h-6 bg-orange-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-app-orange">${r.name.charAt(0)}</span> ${r.name}</p></div>`;
+    }).join('');
+    lucide.createIcons();
+}
 
-    const existingItemIndex = cart.findIndex(item => item.id === itemId);
+function renderAdminReviews() {
+    document.getElementById('admin-reviews-table').innerHTML = reviewsData.map(r => `
+        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"><td class="p-4 font-bold">${r.name}</td><td class="p-4 text-app-orange font-bold">${r.rating} Bintang</td><td class="p-4"><p class="line-clamp-1 max-w-[150px] text-xs">${r.text}</p></td><td class="p-4 text-right"><button onclick="deleteReview(${r.id})" class="text-app-red hover:bg-red-50 dark:hover:bg-red-900/30 p-2 rounded-lg active-scale"><i data-lucide="trash-2" class="w-5 h-5"></i></button></td></tr>
+    `).join('');
+    lucide.createIcons();
+}
 
-    if (existingItemIndex > -1) {
-        // Item sudah ada, tambah kuantitas
-        cart[existingItemIndex].quantity += 1;
-    } else {
-        // Item baru, tambahkan ke keranjang
-        // Kita hanya menyimpan data penting ke keranjang, bukan seluruh objek menu
-        cart.push({ 
-            id: selectedItem.id, 
-            name: selectedItem.name, 
-            price: selectedItem.price, 
-            quantity: 1 
-        });
+function openAddReviewModal() { document.getElementById('add-review-modal').classList.add('open'); }
+function closeAddReviewModal() { document.getElementById('add-review-modal').classList.remove('open'); document.getElementById('form-add-review').reset(); }
+
+function submitNewReview(e) {
+    e.preventDefault();
+    reviewsData.push({ id: Date.now(), name: document.getElementById('r-name').value, rating: parseInt(document.getElementById('r-rating').value), text: document.getElementById('r-text').value });
+    saveData('app_reviews', reviewsData);
+    closeAddReviewModal(); renderAdminReviews(); renderCustomerReviews();
+    alert("Ulasan berhasil ditambahkan ke Beranda!");
+}
+
+function deleteReview(id) {
+    if(confirm('Hapus ulasan ini?')) { reviewsData = reviewsData.filter(r => r.id !== id); saveData('app_reviews', reviewsData); renderAdminReviews(); renderCustomerReviews(); }
+}
+
+// ==========================================
+// TEMA & WARNA
+// ==========================================
+function toggleTheme() {
+    const html = document.documentElement;
+    html.classList.toggle('dark');
+    const isDark = html.classList.contains('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    updateThemeIcons(isDark);
+}
+function updateThemeIcons(isDark) {
+    document.querySelectorAll('.theme-icon').forEach(icon => { icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon'); });
+    lucide.createIcons();
+}
+
+// ==========================================
+// PORTAL CUSTOMER LOGIC
+// ==========================================
+function switchCustomer(viewName) {
+    ['home', 'menu', 'qr'].forEach((v, i) => {
+        const el = document.getElementById(`c-view-${v}`);
+        if(!el) return;
+        el.classList.remove('active', 'slide-left', 'slide-right');
+        if (v === viewName) el.classList.add('active');
+        else if (i < ['home', 'menu', 'qr'].indexOf(viewName)) el.classList.add('slide-left');
+        else el.classList.add('slide-right');
+    });
+    document.querySelectorAll('.c-nav-desk').forEach(btn => {
+        btn.classList.remove('active', 'text-app-orange', 'bg-orange-50', 'dark:bg-gray-700', 'dark:text-app-orange');
+        if (btn.dataset.target === viewName) btn.classList.add('active', 'text-app-orange', 'bg-orange-50', 'dark:bg-gray-700', 'dark:text-app-orange');
+    });
+    document.querySelectorAll('.fab-nav-item').forEach(btn => { btn.classList.remove('active'); if (btn.dataset.target === viewName) btn.classList.add('active'); });
+}
+
+function toggleFab(e) { if(e) e.stopPropagation(); document.getElementById('c-fab-wrapper').classList.toggle('expanded'); }
+
+document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.cat-btn').forEach(t => { t.classList.remove('bg-gray-900', 'dark:bg-app-orange', 'text-white', 'active'); t.classList.add('bg-white', 'dark:bg-gray-800', 'text-gray-600', 'dark:text-gray-300'); });
+        e.target.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-600', 'dark:text-gray-300');
+        e.target.classList.add('bg-gray-900', 'dark:bg-app-orange', 'text-white', 'active');
+        cActiveCategory = e.target.dataset.category; 
+        renderCustomerMenu(cActiveCategory); 
+    });
+});
+
+function renderCustomerMenu(category) {
+    const bestContainer = document.getElementById('bestseller-container');
+    if(bestContainer) {
+        bestContainer.innerHTML = menuItems.filter(i=>i.isBest).map(i => `
+            <div class="min-w-[180px] max-w-[180px] bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden snap-center pb-3 flex flex-col cursor-pointer active-scale" onclick="addToCart(${i.id})">
+                <div class="relative h-28 w-full"><img src="${i.img}" class="w-full h-full object-cover"><div class="absolute top-2 left-2 bg-app-red text-white text-[9px] font-bold px-2 py-1 rounded-md shadow-sm">HOT SELLER</div></div>
+                <div class="px-4 pt-3"><h4 class="font-bold text-sm dark:text-white truncate">${i.name}</h4><p class="text-app-orange font-bold text-sm mt-1">Rp ${i.price.toLocaleString('id')}</p></div>
+            </div>`).join('');
     }
-
-    saveCart();
-    updateCartUI();
-    // Tampilkan notifikasi (opsional, bisa diganti dengan animasi)
-    console.log(`${selectedItem.name} ditambahkan ke keranjang!`);
-}
-
-/**
- * Menghapus item dari keranjang (mengurangi kuantitas atau menghapus seluruh item).
- * @param {number} itemId - ID item yang akan dihapus.
- * @param {boolean} removeAll - Jika true, hapus semua kuantitas item ini.
- */
-function removeFromCart(itemId, removeAll = false) {
-    const existingItemIndex = cart.findIndex(item => item.id === itemId);
-
-    if (existingItemIndex > -1) {
-        if (removeAll || cart[existingItemIndex].quantity <= 1) {
-            // Hapus item dari array jika kuantitasnya 1 atau removeAll=true
-            cart.splice(existingItemIndex, 1);
-        } else {
-            // Kurangi kuantitas
-            cart[existingItemIndex].quantity -= 1;
-        }
-    }
-
-    saveCart();
-    updateCartUI();
-}
-
-/**
- * Menghasilkan tautan WhatsApp dengan daftar pesanan.
- */
-function generateWhatsAppLink() {
-    let orderList = cart.map(item => {
-        // Gunakan nama dan harga dari item yang tersimpan di keranjang
-        const priceDisplay = item.price.toLocaleString('id-ID');
-        return `*${item.quantity}x* ${item.name} (Rp ${priceDisplay}/item)`;
-    }).join('\n');
-
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const totalDisplay = total.toLocaleString('id-ID');
-    
-    let message = `*Halo ${RESTAURANT_NAME},*
-Saya ingin melakukan pemesanan berikut:
-
-${orderList}
-
-*Total Pesanan:* Rp ${totalDisplay}
-
-Mohon konfirmasi pesanan saya. Terima kasih!`;
-    
-    // URL-encode pesan untuk WhatsApp
-    const encodedMessage = encodeURIComponent(message);
-    
-    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-}
-
-/**
- * Membuka jendela WhatsApp untuk checkout.
- */
-function openWhatsApp() {
-    if (cart.length === 0) {
-        alert("Keranjang Anda masih kosong. Silakan tambahkan menu terlebih dahulu.");
-        return;
-    }
-    window.open(generateWhatsAppLink(), '_blank');
-}
-
-
-// ----------------------------------------------------------------------------------
-// --- 3. FUNGSI RENDER TAMPILAN ---
-// ----------------------------------------------------------------------------------
-
-/**
- * Menghasilkan kartu menu ke dalam elemen #menu-grid.
- */
-function generateMenu() {
-    const menuGrid = document.getElementById('menu-grid');
-    if (!menuGrid) return;
-
-    menuGrid.innerHTML = ''; // Kosongkan dulu
-
-    menuItems.forEach(item => {
-        const itemHTML = `
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-500 hover:scale-[1.02] card-hover">
-                <div class="h-48 w-full overflow-hidden">
-                    <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover transition duration-300 hover:opacity-90">
-                </div>
-                <div class="p-6">
-                    <div class="text-sm font-semibold text-orange-600 mb-1">${item.category}</div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">${item.name}</h3>
-                    <p class="text-gray-600 mb-4 h-12 overflow-hidden">${item.desc}</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-2xl font-bold text-orange-700">Rp ${item.price.toLocaleString('id-ID')}</span>
-                        <button onclick="addToCart(${item.id})" class="btn-primary text-white px-6 py-2 rounded-full font-semibold transition-colors shadow-md hover:shadow-lg">
-                            <i data-lucide="plus" class="w-5 h-5 inline mr-1"></i> Tambah
-                        </button>
-                    </div>
+    const filteredMenu = category === 'all' ? menuItems : menuItems.filter(i => i.category === category);
+    document.getElementById('c-menu-list').innerHTML = filteredMenu.map((i, index) => {
+        const qty = cart[i.id] || 0;
+        return `
+        <div class="flex gap-4 bg-white dark:bg-gray-800 p-4 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm animate-pop-in" style="animation-delay: ${index * 80}ms">
+            <img src="${i.img}" class="w-24 h-24 object-cover rounded-xl border border-gray-50 dark:border-gray-700">
+            <div class="flex-1 flex flex-col justify-between py-0.5">
+                <div><h4 class="font-bold text-base dark:text-white line-clamp-1">${i.name}</h4><p class="text-xs text-app-muted dark:text-gray-400 line-clamp-2 mt-1">${i.desc}</p></div>
+                <div class="flex justify-between items-center mt-2">
+                    <span class="font-bold text-sm dark:text-white">Rp ${i.price.toLocaleString('id')}</span>
+                    ${qty===0 ? `<button onclick="addToCart(${i.id})" class="bg-orange-50 dark:bg-gray-700 hover:bg-app-orange hover:text-white text-app-orange text-xs font-bold px-5 py-2 rounded-full active-scale">Tambah</button>` : `<div class="flex gap-3 bg-gray-50 dark:bg-gray-700 px-2 py-1 rounded-full"><button onclick="updateCart(${i.id},-1)" class="w-6 h-6 text-app-orange font-bold">-</button><span class="text-xs font-bold w-4 text-center dark:text-white py-1">${qty}</span><button onclick="updateCart(${i.id},1)" class="w-6 h-6 text-app-orange font-bold">+</button></div>`}
                 </div>
             </div>
-        `;
-        menuGrid.insertAdjacentHTML('beforeend', itemHTML);
-    });
-
-    // Pastikan ikon lucide di menu di-render
-    if (typeof lucide !== 'undefined' && lucide.createIcons) {
-        lucide.createIcons();
-    }
+        </div>`
+    }).join('');
 }
 
-/**
- * Menghasilkan QR Code untuk link WhatsApp.
- */
-function generateQRCode() {
-    const qrCodeContainer = document.getElementById('qr-code');
-    if (!qrCodeContainer) return;
-    
-    // Bersihkan container dari elemen sebelumnya
-    qrCodeContainer.innerHTML = '';
-    
-    const waLink = `https://wa.me/${WHATSAPP_NUMBER}`;
+// ==========================================
+// KERANJANG BELANJA
+// ==========================================
+function addToCart(id) { cart[id] = (cart[id]||0)+1; document.getElementById('nav-cart-icon')?.classList.add('pulse-once'); setTimeout(()=>document.getElementById('nav-cart-icon')?.classList.remove('pulse-once'), 400); updateCartUI(); renderCustomerMenu(cActiveCategory); }
+function updateCart(id, ch) { cart[id]+=ch; if(cart[id]<=0) delete cart[id]; updateCartUI(); renderCustomerMenu(cActiveCategory); }
 
-    // Menggunakan library qrcode.js (dipastikan sudah diimpor melalui CDN di HTML)
-    if (typeof QRCode !== 'undefined') {
-        try {
-            const canvas = document.createElement('canvas');
-            qrCodeContainer.appendChild(canvas);
+function updateCartUI() {
+    let total = 0, count = 0, html = '';
+    for(const [id, qty] of Object.entries(cart)){
+        const i = menuItems.find(m=>m.id==parseInt(id));
+        if(!i) continue;
+        total += i.price*qty; count+=qty;
+        html += `<div class="flex items-center gap-3 bg-white dark:bg-gray-800 p-3 rounded-2xl border border-gray-100 dark:border-gray-700 mb-3"><img src="${i.img}" class="w-12 h-12 rounded-xl object-cover"><div class="flex-1"><h5 class="font-bold text-xs dark:text-white">${i.name}</h5><p class="text-xs text-app-orange font-bold">Rp ${(i.price*qty).toLocaleString('id')}</p></div><div class="flex flex-col bg-gray-50 dark:bg-gray-700 rounded-lg p-1"><button onclick="updateCart(${i.id},1)" class="w-5 h-5 flex items-center justify-center text-gray-500"><i data-lucide="chevron-up" class="w-3 h-3"></i></button><span class="text-xs font-bold text-center dark:text-white">${qty}</span><button onclick="updateCart(${i.id},-1)" class="w-5 h-5 flex items-center justify-center text-gray-500"><i data-lucide="chevron-down" class="w-3 h-3"></i></button></div></div>`;
+    }
+    document.querySelectorAll('.c-cart-items-desktop, .c-cart-items-mobile').forEach(el => el.innerHTML = html);
+    document.querySelectorAll('.c-cart-total').forEach(el => el.textContent = `Rp ${total.toLocaleString('id')}`);
+    document.querySelectorAll('.c-item-count').forEach(el => el.textContent = count > 0 ? count + ' Item' : '0');
+    document.querySelectorAll('.c-cart-empty').forEach(el => el.style.display = count ? 'none' : 'flex');
+    document.querySelectorAll('.c-checkout-btn').forEach(btn => btn.disabled = !count);
+    document.querySelectorAll('.c-cart-badge').forEach(b => { if(count){ b.textContent=count; b.classList.remove('hidden'); } else b.classList.add('hidden'); });
+    lucide.createIcons();
+}
 
-            QRCode.toCanvas(canvas, waLink, {
-                errorCorrectionLevel: 'H',
-                width: 200,
-                color: {
-                    dark: '#000000',
-                    light: '#ffffff'
-                }
-            }, function (error) {
-                if (error) console.error("Error generating QR code:", error);
-            });
-        } catch (e) {
-            console.error("Gagal membuat QR Code:", e);
-            qrCodeContainer.innerHTML = `<p class="text-red-500">Gagal memuat QR Code. Silakan klik tombol di bawah.</p>`;
-        }
+function toggleCustomerCart() {
+    const drawer = document.getElementById('c-cart-drawer');
+    const overlay = document.getElementById('c-cart-overlay');
+    if(!drawer) return;
+    if(drawer.classList.contains('drawer-open')){ drawer.classList.remove('drawer-open'); overlay.classList.remove('opacity-100'); setTimeout(()=>overlay.classList.add('hidden'), 300); }
+    else { overlay.classList.remove('hidden'); void overlay.offsetWidth; overlay.classList.add('opacity-100'); drawer.classList.add('drawer-open'); }
+}
+
+function checkoutWA() {
+    let msg = `*ORDER BARU - RestoKita* 🔥\n\n`;
+    let total = 0;
+    for (const [id, qty] of Object.entries(cart)) {
+        const item = menuItems.find(i => i.id == parseInt(id));
+        if(item) { total += item.price * qty; msg += `▪ ${qty}x ${item.name}\n`; }
+    }
+    msg += `\n*Total: Rp ${total.toLocaleString('id')}*\n\n_Mohon pesanan disiapkan_`;
+    window.open(`https://wa.me/${restoWaNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ==========================================
+// PORTAL ADMIN LOGIC
+// ==========================================
+function openLoginModal() { 
+    document.getElementById('login-modal').classList.add('open'); 
+    document.getElementById('login-password').value = '';
+    document.getElementById('login-error').classList.add('hidden');
+}
+function closeLoginModal() { document.getElementById('login-modal').classList.remove('open'); }
+
+// PERBAIKAN FITUR MATA (PASSWORD)
+function togglePasswordVisibility() {
+    const input = document.getElementById('login-password');
+    const icon = document.getElementById('eye-icon');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
     } else {
-         qrCodeContainer.innerHTML = `<p class="text-red-500">Library QR Code tidak dimuat. Silakan klik tombol di bawah.</p>`;
+        input.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+    }
+    lucide.createIcons();
+}
+
+function submitLogin(e) {
+    e.preventDefault();
+    if(document.getElementById('login-password').value === 'admin123') { closeLoginModal(); toggleAppMode('admin'); }
+    else document.getElementById('login-error').classList.remove('hidden');
+}
+
+function toggleAppMode(mode) {
+    document.getElementById('app-customer').classList.toggle('mode-hidden', mode === 'admin');
+    document.getElementById('app-customer').classList.toggle('mode-active', mode !== 'admin');
+    document.getElementById('app-admin').classList.toggle('mode-hidden', mode !== 'admin');
+    document.getElementById('app-admin').classList.toggle('mode-active', mode === 'admin');
+    if(mode === 'admin') { setTimeout(initChart, 300); renderAdminMenu(); renderAdminReviews(); } 
+    else { renderCustomerMenu(cActiveCategory); renderCustomerReviews(); }
+}
+
+function switchAdmin(viewName) {
+    ['dashboard', 'menu', 'reviews', 'settings'].forEach((v) => {
+        const el = document.getElementById(`a-view-${v}`);
+        if(el) { el.classList.remove('active', 'slide-left', 'slide-right');
+        if (v === viewName) el.classList.add('active');
+        else if (['dashboard', 'menu', 'reviews', 'settings'].indexOf(v) < ['dashboard', 'menu', 'reviews', 'settings'].indexOf(viewName)) el.classList.add('slide-left');
+        else el.classList.add('slide-right'); }
+    });
+    document.querySelectorAll('.a-nav-btn').forEach(btn => {
+        btn.classList.remove('active', 'text-app-orange', 'bg-orange-50', 'dark:bg-gray-700'); btn.classList.add('text-gray-500');
+        if(btn.dataset.target === viewName) { btn.classList.remove('text-gray-500'); btn.classList.add('active', 'text-app-orange', 'bg-orange-50', 'dark:bg-gray-700'); }
+    });
+}
+
+function toggleAdminSidebar() {
+    const s = document.getElementById('a-mobile-sidebar'), o = document.getElementById('a-sidebar-overlay');
+    if(s.classList.contains('sidebar-open')){ s.classList.remove('sidebar-open'); o.classList.remove('opacity-100'); setTimeout(()=>o.classList.add('pointer-events-none'), 300); }
+    else { o.classList.remove('pointer-events-none'); void o.offsetWidth; o.classList.add('opacity-100'); s.classList.add('sidebar-open'); }
+}
+
+// ==========================================
+// MANAJEMEN MENU ADMIN (DENGAN HOT SELLER TOGGLE)
+// ==========================================
+function renderAdminMenu() {
+    document.getElementById('admin-menu-table').innerHTML = menuItems.map(i => `
+        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 border-b border-gray-100 dark:border-gray-700">
+            <td class="p-4 flex items-center gap-4">
+                <img src="${i.img}" class="w-12 h-12 rounded-lg object-cover">
+                <div>
+                    <p class="font-bold line-clamp-1 max-w-[150px]">${i.name} ${i.isBest ? '<span class="ml-1 bg-red-100 text-red-500 text-[9px] px-1.5 py-0.5 rounded font-bold">HOT</span>' : ''}</p>
+                    <p class="text-[10px] text-app-muted uppercase mt-1">${i.category}</p>
+                </div>
+            </td>
+            <td class="p-4 font-bold">Rp ${i.price.toLocaleString('id')}</td>
+            <td class="p-4 text-right flex justify-end gap-1">
+                <button onclick="toggleHotSeller(${i.id})" title="${i.isBest ? 'Hapus dari Rekomendasi' : 'Jadikan Rekomendasi'}" class="${i.isBest ? 'text-app-orange bg-orange-50 dark:bg-orange-900/30' : 'text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600'} p-2 rounded-lg active-scale transition-colors"><i data-lucide="flame" class="w-5 h-5"></i></button>
+                <button onclick="deleteMenu(${i.id})" title="Hapus Menu" class="text-app-red hover:bg-red-50 dark:hover:bg-red-900/30 p-2 rounded-lg active-scale transition-colors"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+            </td>
+        </tr>
+    `).join('');
+    lucide.createIcons();
+}
+
+function toggleHotSeller(id) {
+    const item = menuItems.find(i => i.id === id);
+    if(item) {
+        item.isBest = !item.isBest;
+        saveData('app_menu', menuItems);
+        renderAdminMenu(); 
+        renderCustomerMenu(cActiveCategory); // Update tampilan depan langsung
     }
 }
 
+function deleteMenu(id) {
+    if(confirm('Hapus menu ini?')) { menuItems = menuItems.filter(i => i.id !== id); saveData('app_menu', menuItems); renderAdminMenu(); renderCustomerMenu(cActiveCategory); }
+}
 
-// ----------------------------------------------------------------------------------
-// --- 4. INITIALIZATION & EVENT LISTENERS ---
-// ----------------------------------------------------------------------------------
+function openAddMenuModal() { document.getElementById('add-menu-modal').classList.add('open'); }
+function closeAddMenuModal() { document.getElementById('add-menu-modal').classList.remove('open'); document.getElementById('form-add-menu').reset(); }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // 4.1. Initial Render
-    generateMenu();
-    updateCartUI(); // Pastikan keranjang di navbar terupdate
-
-    // 4.2. Element References
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const cartBtn = document.getElementById('cart-btn');
-    const cartModal = document.getElementById('cart-modal');
-    const closeCart = document.getElementById('close-cart');
-    const cartOverlay = document.getElementById('cart-overlay');
-    const waFloat = document.getElementById('wa-float');
+function submitNewMenu(e) {
+    e.preventDefault();
+    // Menangkap nilai checkbox Hot Seller
+    const isBest = document.getElementById('m-best').checked;
     
-    const qrBtn = document.getElementById('qr-btn'); 
-    const qrModal = document.getElementById('qr-modal');
-    const closeQR = document.getElementById('close-qr');
-    const qrOverlay = document.getElementById('qr-overlay');
-    const directWaBtn = document.getElementById('direct-wa'); 
-
-    const pesanSekarangBtn = document.getElementById('nav-pesan-sekarang'); 
-    const pesanSekarangMobileBtn = document.getElementById('nav-pesan-sekarang-mobile'); 
-    
-    const checkoutBtn = document.getElementById('checkout-btn');
-    const openMapsBtn = document.getElementById('open-maps-btn'); 
-    const scrollTopBtn = document.getElementById('scroll-top');
-    const navbar = document.getElementById('navbar');
-
-
-    // 4.3. Mobile Menu Toggle
-    if (mobileMenuBtn && mobileMenu) {
-        mobileMenuBtn.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-        });
-    }
-    
-    // 4.4. Cart Modal Handlers
-    const openCartModal = () => {
-        if (cartModal) cartModal.classList.remove('hidden');
-        updateCartUI(); // Perbarui konten keranjang setiap kali dibuka
-    };
-
-    if (cartBtn) cartBtn.addEventListener('click', openCartModal);
-    if (closeCart) closeCart.addEventListener('click', () => { if (cartModal) cartModal.classList.add('hidden'); });
-    if (cartOverlay) cartOverlay.addEventListener('click', () => { if (cartModal) cartModal.classList.add('hidden'); });
-
-    // 4.5. WhatsApp/QR Modal Handlers
-    const openQrModal = () => {
-        if (qrModal) {
-            generateQRCode(); // Buat QR code setiap kali modal dibuka
-            qrModal.classList.remove('hidden');
-        } else {
-            openWhatsApp(); // Fallback
-        }
-    };
-    
-    if (waFloat) waFloat.addEventListener('click', openQrModal);
-    if (qrBtn) qrBtn.addEventListener('click', openQrModal); 
-    
-    if (closeQR) closeQR.addEventListener('click', () => { if (qrModal) qrModal.classList.add('hidden'); });
-    if (qrOverlay) qrOverlay.addEventListener('click', () => { if (qrModal) qrModal.classList.add('hidden'); });
-    
-    // Event listener untuk tombol "Buka WhatsApp Langsung" di modal QR
-    if (directWaBtn) directWaBtn.addEventListener('click', () => { 
-        window.open(`https://wa.me/${WHATSAPP_NUMBER}`, '_blank');
-        if (qrModal) qrModal.classList.add('hidden');
+    menuItems.push({ 
+        id: Date.now(), 
+        name: document.getElementById('m-name').value, 
+        category: document.getElementById('m-category').value, 
+        price: parseInt(document.getElementById('m-price').value), 
+        desc: document.getElementById('m-desc').value, 
+        img: document.getElementById('m-img').value, 
+        isBest: isBest 
     });
-
-    // 4.6. Checkout & Pesan Sekarang Handlers
-    [pesanSekarangBtn, pesanSekarangMobileBtn].forEach(btn => {
-        if (btn) {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                openCartModal(); 
-                if (mobileMenu) mobileMenu.classList.add('hidden');
-            });
-        }
-    });
-
-    if (checkoutBtn) {
-        checkoutBtn.addEventListener('click', function() {
-            if (cart.length > 0) {
-                openWhatsApp();
-                if (cartModal) cartModal.classList.add('hidden');
-            }
-        });
-    }
-
-    // 4.7. Buka Maps (menggunakan tautan statis untuk contoh)
-    if (openMapsBtn) {
-        const defaultMapLink = "https://maps.app.goo.gl/YourRestaurantLocation"; // Ganti dengan link Google Maps Restoran Anda
-        openMapsBtn.addEventListener('click', function() {
-            window.open(defaultMapLink, '_blank');
-        });
-    }
     
-    // 4.8. Scroll Effects (Navbar & Scroll to Top)
-    if (navbar) {
-        const toggleNavbarStyles = () => {
-            const scrolled = window.scrollY > 100;
+    saveData('app_menu', menuItems);
+    closeAddMenuModal(); 
+    renderAdminMenu(); 
+    renderCustomerMenu(cActiveCategory);
+    alert("Berhasil! Menu baru sudah disimpan.");
+}
 
-            if (scrolled) {
-                navbar.classList.add('navbar-scrolled');
-                navbar.classList.remove('glass-effect');
-                // Perbaiki warna nama restoran saat di-scroll
-                const nameElement = document.getElementById('navbar-restaurant-name');
-                if (nameElement) nameElement.classList.remove('text-white');
-            } else {
-                navbar.classList.remove('navbar-scrolled');
-                navbar.classList.add('glass-effect');
-                 // Perbaiki warna nama restoran saat di atas
-                const nameElement = document.getElementById('navbar-restaurant-name');
-                if (nameElement) nameElement.classList.add('text-white');
-            }
-        };
-        window.addEventListener('scroll', toggleNavbarStyles);
-        toggleNavbarStyles(); 
-    }
-
-    if (scrollTopBtn) {
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 300) {
-                scrollTopBtn.classList.add('visible');
-            } else {
-                scrollTopBtn.classList.remove('visible');
-            }
-        });
-        scrollTopBtn.addEventListener('click', function() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
-
-    // 4.9. Smooth Scroll for Navigation Links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
-            
-            // Perbaikan: Smooth scroll tidak dijalankan jika link mengarah ke modal (e.g. Pesan Sekarang)
-            if (href === '#menu' && (this.id.includes('pesan-sekarang'))) {
-                 // Hanya menjalankan fungsionalitas tombol pesan sekarang (yaitu openCartModal)
-                 return; 
-            }
-            
-            e.preventDefault();
-            const target = document.querySelector(href);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                // Tutup mobile menu setelah klik link
-                if (mobileMenu) mobileMenu.classList.add('hidden');
-            }
-        });
-    });
-
-    // 4.10. Final Initialization Ikon (PENTING!)
-    if (typeof lucide !== 'undefined' && lucide.createIcons) {
-        lucide.createIcons();
-    }
-});
+// CHART
+let chartRendered = false;
+function initChart() {
+    if(chartRendered) return;
+    const ctx = document.getElementById('revenueChart');
+    if(!ctx) return;
+    const ctx2d = ctx.getContext('2d');
+    let gradient = ctx2d.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, 'rgba(249, 115, 22, 0.4)'); gradient.addColorStop(1, 'rgba(249, 115, 22, 0.0)');
+    new Chart(ctx2d, { type: 'line', data: { labels: ['Sn', 'Sl', 'Rb', 'Km', 'Jm', 'Sb', 'Mg'], datasets: [{ data: [1.2, 1.9, 1.5, 2.1, 3.8, 4.2, 4.5], borderColor: '#F97316', backgroundColor: gradient, fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { border: { display: false } }, x: { grid: { display: false }, border: { display: false } } } } });
+    chartRendered = true;
+}
